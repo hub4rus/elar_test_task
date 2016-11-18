@@ -9,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ru.test.service.UserService;
@@ -41,7 +40,12 @@ public class AppController
 
     private String prepOk(Model model,Authentication auth) {
         UserDetails userDetail = (UserDetails) auth.getPrincipal();
-        model.addAttribute("message", "Successful authorized user [login='" + userDetail.getUsername() + "']");
+        model.addAttribute("message",
+                "Successful authorized user [login='" +
+                userDetail.getUsername() +
+                "', name='"+
+                userService.findUserByLogin(userDetail.getUsername()).getName()+
+                "']");
         return "ok";
     }
 
