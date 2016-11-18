@@ -28,7 +28,7 @@ public class AppController
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value={"/","/j_spring_security_check"}, method = RequestMethod.GET)
     public String make(Model model) {
         //check if user is login
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
