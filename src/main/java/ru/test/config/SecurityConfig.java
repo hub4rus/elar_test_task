@@ -36,11 +36,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
 
+        //Межсайтовой подделки запроса (CSRF).
         // отключена защита csrf на время тестов
         http.csrf().disable().addFilterBefore(filter,CsrfFilter.class);
 
         http.authorizeRequests()
-                .antMatchers("/").permitAll()
+                //.antMatchers("/").permitAll()
+                .antMatchers("/resources/**").permitAll()
+                .antMatchers("/ok").access("hasRole('USER_ROLE')")
+                //.antMatchers("/**").authenticated();
                 .anyRequest().authenticated();
 
         http.formLogin()
