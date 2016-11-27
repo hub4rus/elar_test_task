@@ -6,5 +6,6 @@
 
 <body>
 	<h1>Message : ${message}</h1>
+	<p>Go to <a href="${pageContext.request.contextPath}/logout">Logout</a>
 </body>
 </html>

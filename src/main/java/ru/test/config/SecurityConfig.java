@@ -6,6 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,6 +21,7 @@ import ru.test.service.Impl.UserDetailsServiceImpl;
 @Configuration
 @ComponentScan("ru.test")
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled=true) //for @Secured >> xml = <security:global-method-security secured-annotations="enabled" />
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
     @Autowired
@@ -40,12 +42,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         // отключена защита csrf на время тестов
         http.csrf().disable().addFilterBefore(filter,CsrfFilter.class);
 
+//        http.authorizeRequests()
+//                //.antMatchers("/").permitAll()
+//                .antMatchers("/resources/**").permitAll()
+//                //.antMatchers("/ok").access("hasRole('ROLE_USER')")
+//                //.antMatchers("/ok").hasRole("ROLE_USER")
+//                //
+//                //.antMatchers("/**").authenticated()
+//                .anyRequest().authenticated() //all requests will checked
+//                .antMatchers("/ok").hasRole("ROLE_USER");
+//                //.antMatchers("/info").hasRole("ROLE_USER");
+
         http.authorizeRequests()
                 //.antMatchers("/").permitAll()
+                .antMatchers("/j_spring_security_check").permitAll()
+                .antMatchers("/logout").permitAll()
                 .antMatchers("/resources/**").permitAll()
-                .antMatchers("/ok").access("hasRole('USER_ROLE')")
-                //.antMatchers("/**").authenticated();
-                .anyRequest().authenticated();
+                //.antMatchers("/ok").hasRole("ROLE_USER") //can't start ROLE_
+                .antMatchers("/ok").access("hasRole('ROLE_USER')")
+                .anyRequest().authenticated()  //all requests will checked
+                .and().rememberMe();
+
 
         http.formLogin()
                 // указываем страницу с формой логина
@@ -68,7 +85,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 // указываем URL при удачном логауте
                 .logoutSuccessUrl("/login?logout")
                 // делаем не валидной текущую сессию
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");;
+
+//                .deleteCookies("JSESSIONID,SPRING_SECURITY_REMEMBER_ME_COOKIE").permitAll()
+//                .and()
+//                .csrf();
     }
 
     @Bean

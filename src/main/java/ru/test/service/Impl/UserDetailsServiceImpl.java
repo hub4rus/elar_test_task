@@ -44,7 +44,9 @@ public class UserDetailsServiceImpl implements UserDetailsService
         log.info("User="+user);
         {
             Set<GrantedAuthority> roles=new HashSet();
-            roles.add(new SimpleGrantedAuthority((user!=null)?UserRoleEnum.USER_ROLE.name():UserRoleEnum.NONE_ROLE.name()));
+            roles.add(new SimpleGrantedAuthority(
+                    (user!=null)?UserRoleEnum.ROLE_USER.name():UserRoleEnum.ROLE_NONE.name()
+            ));
 
             log.info("roles="+roles);
             log.info("pass="+userService.getMD5PassById(user.getId()));
