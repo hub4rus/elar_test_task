@@ -60,6 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/resources/**").permitAll()
                 //.antMatchers("/ok").hasRole("ROLE_USER") //can't start ROLE_
                 .antMatchers("/ok").access("hasRole('ROLE_USER')")
+                //
+                .antMatchers("/list").access("hasRole('ROLE_USER')")
+                .antMatchers("/add").access("hasRole('ROLE_USER')")
+                .antMatchers("/delete").access("hasRole('ROLE_USER')")
                 .anyRequest().authenticated()  //all requests will checked
                 .and().rememberMe();
 
