@@ -98,6 +98,10 @@ public class AppController
                                @RequestParam(value="login", required=true) String user_login,
                                @RequestParam(value="name", required=true)  String user_name)
     {
+        log.info("edit: id="+user_id);
+        log.info("edit: login="+user_login);
+        log.info("edit: name="+user_name);
+
         // Получаем список пользователей
         if (user_id<0) {
             //add
